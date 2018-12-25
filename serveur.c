@@ -119,7 +119,7 @@ int main(int argc, char * argv[])
                     dim[0] = atoi(p);
                     p = strtok(NULL, ".");
                     dim[1] = atoi(p);
-                    printf("l = %d, L = %d\n",dim[0], dim[1]);
+                    //printf("l = %d, L = %d\n",dim[0], dim[1]);
                 }
                 else if (strcmp(p,"V") == 0) {
                     p = strtok(NULL, ":");
@@ -127,7 +127,7 @@ int main(int argc, char * argv[])
                     vent[0] = atoi(p);
                     p = strtok(NULL, ".");
                     vent[1] = atoi(p);
-                    printf("Force = %d, Direction = %d\n",vent[0], vent[1]);
+                    //printf("Force = %d, Direction = %d\n",vent[0], vent[1]);
                 }
                 else if (strcmp(p,"R") == 0) {
                     p = strtok(NULL, ":");
@@ -135,14 +135,36 @@ int main(int argc, char * argv[])
                     coordonnes_rocher[counter][0] = atoi(p);
                     p = strtok(NULL, ".");
                     coordonnes_rocher[counter][1] = atoi(p);
-                    printf("x = %d, y = %d\n", coordonnes_rocher[counter][0], coordonnes_rocher[counter][1]);
+                    //printf("x = %d, y = %d\n", coordonnes_rocher[counter][0], coordonnes_rocher[counter][1]);
                     counter++;
                 }
             }
         }
+        /*dont forget to set a condition tat if it wasn't*/
         coo_rocher_max = counter;
-        printf("max = %d\n",coo_rocher_max);
+        //printf("max = %d\n",coo_rocher_max);
         //END READ DATA FROM FILE
+        //Affichage de l'envirannement
+        int a,b, siOno;
+        for (a = 0; a < dim[0]; a++)
+        {
+            for (b = 0; b < dim[1]; b++)
+            {
+                siOno = 0;
+                for (counter = 0; counter < coo_rocher_max; counter++)
+                {
+                    if ((a == coordonnes_rocher[counter][0]) && (b == coordonnes_rocher[counter][1]))
+                    {
+                        siOno = 1;
+                    }
+                }
+
+                if(siOno == 0){
+                    printf("O ");
+                } else { printf("R "); }
+            }
+            printf("\n");
+        }
         //TALKING FUNCTION
         read_header(socket_service, talker);
         printf("%s is connected\n", talker);
