@@ -34,6 +34,14 @@ int main(int argc, char * argv[])
   struct sockaddr_in adr, adresse;
   socklen_t lgadresse;//sizeof(struct sockaddr_in);
 
+  int counter = 0;
+  int coordonnees_rocher[100][2];
+  int coo_cnt_max = 0;
+  int dim[2];
+  int vent[2];
+  char str[10];
+
+
   if (argc!=2)
   {
     fprintf(stderr,"Usage : %s port-number", argv[0]);
@@ -85,11 +93,76 @@ int main(int argc, char * argv[])
   char *talker = (char*)malloc(MAXNAME);
   char *chat =  (char*)malloc(MAXTEXT);
   char *begchat = chat;
+
+
+
   switch(pidFils=fork()) {
   case -1:
     perror("fork");
     exit(1);
   case 0:
+
+    //****
+
+    FileBat = fopen("carte.txt","r");   
+    while(fgets(str, 10, FileBat) != NULL){
+                char *p;
+                p = strtok(str, ":");
+                if (p != NULL) {
+                    if (strcmp(p,"D") == 0) {
+                        p = strtok(NULL, ":");
+                        p = strtok(p, ".");
+                        dim[0] = atoi(p);
+                        p = strtok(NULL, ".");
+                        dim[1] = atoi(p);
+                        //printf("l = %d, L = %d\n",dim[0], dim[1]);
+                    }
+                    else if (strcmp(p,"V") == 0) {
+                        p = strtok(NULL, ":");
+                        p = strtok(p, ".");
+                        vent[0] = atoi(p);
+                        p = strtok(NULL, ".");
+                        vent[1] = atoi(p);
+                        //printf("Force = %d, Direction = %d\n",vent[0], vent[1]);
+                    }
+                    else if (strcmp(p,"R") == 0) {
+                        p = strtok(NULL, ":");
+                        p = strtok(p, ".");
+                        coordonnees_rocher[counter][0] = atoi(p);
+                        p = strtok(NULL, ".");
+                        coordonnees_rocher[counter][1] = atoi(p);
+                        //printf("x = %d, y = %d\n", coordonnes_rocher[counter][0], coordonnes_rocher[counter][1]);
+                        counter++;
+                    }
+                }
+            }
+            /*dont forget to set a condition tat if it wasn't*/
+            coo_cnt_max = counter;
+            //printf("max = %d\n",coo_rocher_max);
+            //END READ DATA FROM FILE
+            //Affichage de l'envirannement
+            int a,b, siOno;
+            for (a = 0; a < dim[0]; a++)
+            {
+                for (b = 0; b < dim[1]; b++)
+                {
+                    siOno = 0;
+                    for (counter = 0; counter < coo_cnt_max; counter++)
+                    {
+                        if ((a == coordonnees_rocher[counter][0]) && (b == coordonnees_rocher[counter][1]))
+                        {
+                            siOno = 1;
+                        }
+                    }
+
+                    if(siOno == 0){
+                        printf("O ");
+                    } else { printf("R "); }
+                }
+                printf("\n");
+            }
+            fclose(FileBat);
+    //****
 
     read_header(socket_service, talker);
     printf("%s is connected\n", talker);
