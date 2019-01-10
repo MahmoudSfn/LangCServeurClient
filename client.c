@@ -27,10 +27,7 @@ int main(int argc, char * argv[])
   struct hostent * hote;
   struct sockaddr_in adr;
   
-  FILE *FileBat = fopen("bateau.txt", "w+");
-  fprintf(FileBat, "%s\n",argv[1]);
-
-  printf("%s\n", argv[1]);
+  FILE *FileBat = fopen("bateau.txt", "w");
   
 
   if (argc!=2)
@@ -45,7 +42,9 @@ int main(int argc, char * argv[])
     exit(1);
   }
   
-  
+  fprintf(FileBat, "%s\n",argv[1]);
+  printf("%s\n", argv[1]);
+  fclose(FileBat);
 
   hote=gethostbyname("Mahs");
   port=atoi("6543");
