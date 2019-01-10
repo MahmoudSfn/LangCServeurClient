@@ -33,6 +33,7 @@ int main(int argc, char * argv[])
   char commandeWrite[80];
   struct sockaddr_in adr, adresse;
   socklen_t lgadresse;//sizeof(struct sockaddr_in);
+
   if (argc!=2)
   {
     fprintf(stderr,"Usage : %s port-number", argv[0]);
@@ -40,6 +41,12 @@ int main(int argc, char * argv[])
   }
 
   port = atoi(argv[1]);
+
+  char *bateau;
+  FILE *FileBat = fopen("bateau.txt", "r");
+  fscanf(FileBat, "%s\n", bateau);
+  printf("%s\n", bateau);
+  fclose(FileBat);
 
   if ((socket_RV=socket(AF_INET, SOCK_STREAM, 0)) ==-1)
   {
@@ -86,6 +93,9 @@ int main(int argc, char * argv[])
 
     read_header(socket_service, talker);
     printf("%s is connected\n", talker);
+    sleep(1);
+    
+
     do
     {
       c = EOF;
